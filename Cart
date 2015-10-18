@@ -1,0 +1,52 @@
+/**
+ *  Class representing a shopping cart for the
+ *  second assignment in DIT948, 2015 edition.
+ */
+
+public class Cart  {
+
+	
+	private final Product[] products = new Product[100];
+
+	//position of the first free cell to add a product
+	private int position =0;
+	
+	
+	/**
+	 * Add a product to the list
+	 * @param product
+	 */
+	public void addProduct(Product product) {   
+		products[position] = product;
+	    position++;
+	}
+	
+	/**
+	 * Calculate the total price
+	 * @return
+	 */
+	public double totalPrice(){
+		double total_price = 0;
+		for(int i = 0; i <= position; i++){
+			if (products[i]!=null)
+			total_price+=products[i].getPrice();
+		}
+		return total_price;
+	      
+	}
+
+	/**
+	 * String representation of products in a shopping 
+	 * cart
+	 */
+	public String toString() {
+		String result = "";
+		for(int i = 0; i < position; i++){
+			result+=products[i].toString();
+			result+="\n";
+		}
+	     
+		return result;
+	}
+
+}
