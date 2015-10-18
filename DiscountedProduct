@@ -1,0 +1,60 @@
+/**
+ *  Subclass representing a  discounted product to be 
+ *  purchased for the second assignment in DIT948, 2015 edition.
+ *  It extends the <tt>Product<tt> class with two instance 
+ *  variables
+ */
+
+public class DiscountedProduct extends Product {
+
+	
+	private final Product original;
+	private final double discount;
+
+	/**
+	 * Construct a discounted product
+	 * @param original
+	 * @param discount
+	 */
+	public DiscountedProduct(Product original, double discount) {
+		super(original);
+		this.original = original;
+		this.discount = discount;
+	
+
+	}
+
+	/**
+	 * Return the price of this discounted product
+	 * @param cart shopping cart
+	 * @return discounted price 
+	 */
+	public double getPrice() {
+		double tmp1=0;
+		double tmp2=0;
+		double tmp3=0;
+		tmp1 = discount / 100;
+		tmp2 = original.getPrice() * tmp1;
+		tmp3 = original.getPrice() - tmp2;
+		return tmp3;
+	}
+	
+	/**
+	 * Returns true if the price of this product
+	 * can be reduced
+	 * @return 
+	 */	
+	public boolean canBeReduced() {
+		
+		return false;
+	}
+
+	/**
+	 * Return the string representation of the product
+	 * Example: CD [discounted 20 %] 
+	 */
+	public String toString() {
+	       
+		return original.getName() + " [discounted by"+ discount + "% ] "+ this.getPrice()+ " SEK.  Sold by " + original.getSeller();
+	}
+}
