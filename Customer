@@ -1,0 +1,143 @@
+import java.util.Scanner;
+
+
+public class Customer {
+
+	private Scanner sc;
+	private String customerName;
+	int quantity;
+	
+	
+	public Customer(Scanner sc) {
+		this.sc = sc;
+	}
+	
+	public Customer() {
+		
+	}
+
+	public void greet(){
+		 System.out.println("Welcome to DIT948 shop");
+		 System.out.println("What's your name?");
+		 customerName = sc.nextLine();
+		 System.out.println("Hi "+customerName+". Please choose one of the following options:");
+		 System.out.println("");
+	}
+	
+	private boolean ask_checkout(){
+		System.out.println("Enter 1 to buy a product");
+		System.out.println("Enter 0 to check out and proceed with payment");
+		int proceed = sc.nextInt();
+		sc.nextLine();
+		
+		if (proceed == 1){
+			return false;
+		}
+		else if (proceed == 0){
+			return true;	
+		}
+		else{
+			handle_invalidUserInput();              // throw error message if invalid input
+			return false;
+		}
+	}
+	
+	public void handle_checkout(Cart cart){         // method where total price and products in cart are displayed
+		cart.toString();
+		System.out.println("In total you have to pay: " + cart.totalPrice() + " SEK.");
+		System.out.println(cart.toString());
+	}
+
+	private void continue_shop(Cart cart) {         // if user proceeds (enters 1)
+		handle_purchase(cart);
+	}
+	
+	private boolean ask_buy2take3(){
+		System.out.println("Does buy 2 take 3 apply? Y/N:");
+		String buy2take3 = sc.nextLine();
+		if(buy2take3.equalsIgnoreCase("y"))
+			return true;
+		else
+			return false;
+	}
+	
+	private double ask_discount(){
+		System.out.println("Discount in percent (enter 0 if no discount applies):");
+		double dis = sc.nextInt();
+		sc.nextLine();
+		if(dis > 0)
+			return dis;
+		else if(dis < 0){                             // throw error message if invalid input
+			handle_invalidUserInput();
+			return 0;
+		}
+		return 0;
+	}
+	
+	private void handle_purchase(Cart cart){         // method to determine the what type the product is of
+		Product p = ask_productDetails();
+		double discount = ask_discount();
+		boolean buy2take3 = ask_buy2take3();
+		Product temp_product = p;
+		
+		if(discount > 0){                          
+			temp_product = new DiscountedProduct(p, discount);
+		}
+		if(buy2take3){
+			double price = calculate_buy2get3(temp_product);
+			temp_product = new Buy2Take3Product(temp_product);
+			temp_product = new Product(temp_product.getSeller(), temp_product.getName(), price);
+			
+		}
+
+			add_products_to_cart(cart, temp_product);
+	}
+		
+	private double calculate_buy2get3(Product p) {     
+		double i = quantity - (quantity/3);
+		
+		return ((i * p.getPrice())/quantity);
+	}
+
+	private void add_products_to_cart(Cart cart, Product p) {  // add products to cart. Quantity = nr of same product purchased
+		for(int i = 0; i <quantity;i++){
+			cart.addProduct(p);
+		}
+	}
+
+	private Product ask_productDetails(){
+		System.out.println("Product name:");
+		String name = sc.nextLine();
+		
+		System.out.println("Seller:");
+		String sell = sc.nextLine();
+		
+		System.out.println("Price:");
+		double sek = sc.nextDouble();
+		sc.nextLine();	
+		
+		System.out.println("Number of items");
+		quantity = sc.nextInt();
+		sc.nextLine();
+		
+		
+		Product product = new Product(sell, name, sek);   // create product from user´s input 
+		return product;
+	}
+	
+	public void shop(Cart cart) {
+		
+		while(!ask_checkout())
+			continue_shop(cart);
+		
+		handle_checkout(cart);
+		
+	}
+	
+	
+	private void handle_invalidUserInput(){
+		System.err.println("You have entered invalid input, your laptop is \ngoing to blow up in 3 seconds. \nJK. The program is going to exit.");
+		System.exit(1);
+	}
+	
+}
