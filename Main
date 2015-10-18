@@ -1,0 +1,39 @@
+import java.util.*;
+
+/**
+ *  Class representing a shopping cart application for the
+ *  second assignment in DIT948, 2015 edition.
+ *  This is the main class for the application, interacting
+ *  with the customer, adding to the cart different product to 
+ *  be purchased and finally calculating the total amount to be payed
+ *  
+ */
+
+public class Main {
+	
+	static Main main;
+	
+	Scanner sc;
+	Customer ci;
+	Cart cart;
+	
+	public Main() {
+		sc = new Scanner(System.in);
+	}
+    
+	 private void keepCalmAndDoTheShopping_Assignment(){   // Method to invoke interaction with customer,
+			ci = new Customer(sc);                         // get customer input and finally
+			ci.greet();                                    // determine if user want to continue or exit
+			cart = new Cart();
+			ci.shop(cart);
+	}
+	 
+	
+	public static void main(String[] args) {               
+		main = new Main();
+		main.keepCalmAndDoTheShopping_Assignment();
+	}
+	
+	
+	
+}
